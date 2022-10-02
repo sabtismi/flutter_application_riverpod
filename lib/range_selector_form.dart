@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_riverpod/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef IntValueSetter = void Function(int value);
 
-class RangeSelectorForm extends StatefulWidget {
-  const RangeSelectorForm(
-      {Key? key,
-      required this.formKey,
-      required this.minValueSetter,
-      required this.maxValueSetter})
-      : super(key: key);
+class RangeSelectorForm extends ConsumerWidget {
+  const RangeSelectorForm({
+    Key? key,
+    required this.formKey,
+  }) : super(key: key);
   final GlobalKey<FormState> formKey;
-  final IntValueSetter minValueSetter;
-  final IntValueSetter maxValueSetter;
-
   @override
-  _RangeSelectorFormState createState() => _RangeSelectorFormState();
-}
-
-class _RangeSelectorFormState extends State<RangeSelectorForm> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Form(
-      key: widget.formKey,
+      key: formKey,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -29,14 +21,16 @@ class _RangeSelectorFormState extends State<RangeSelectorForm> {
           children: [
             RangeSelectorTextFormField(
               labelText: "Minimum",
-              intValueSetter: widget.minValueSetter,
+              intValueSetter: (value) =>
+                  ref.read(randomizerProvider.notifier).setMin(value),
             ),
             const SizedBox(
               height: 12,
             ),
             RangeSelectorTextFormField(
               labelText: "Maximum",
-              intValueSetter: widget.maxValueSetter,
+              intValueSetter: (value) =>
+                  ref.read(randomizerProvider.notifier).setMax(value),
             ),
           ],
         ),

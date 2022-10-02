@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_riverpod/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RandomizerPage extends StatefulWidget {
-  final int min, max;
-  const RandomizerPage({
-    Key? key,
-    required this.min,
-    required this.max,
-  }) : super(key: key);
+class RandomizerPage extends ConsumerWidget {
+  const RandomizerPage({Key? key}) : super(key: key);
 
   @override
-  _RandomizerPageState createState() => _RandomizerPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final randomizer = ref.watch(randomizerProvider);
 
-class _RandomizerPageState extends State<RandomizerPage> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Randomizer"),
-        ),
-        body: Container(
-          child: Text(widget.max.toString()),
-        ));
+      appBar: AppBar(
+        title: const Text("Randomizer"),
+      ),
+      body: Center(
+        child:
+            Text(randomizer.generatedNumber?.toString() ?? 'Generate a Number'),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            ref.read(randomizerProvider.notifier).generatedRandomNumber();
+          },
+          label: const Text('Generate')),
+    );
   }
 }
